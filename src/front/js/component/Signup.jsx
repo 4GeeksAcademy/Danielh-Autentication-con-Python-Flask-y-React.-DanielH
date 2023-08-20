@@ -4,6 +4,11 @@ import React from "react";
 export const Signup = () => {
     return(
         <form>
+    <div className="mb-3">
+        <label htmlFor="Ejemplo: Daniel" className="form-label">Nombre</label>
+        <input type="text" className="form-control" id="exampleInputNombre" aria-describedby="NombreHelp"></input>
+        <div id="nameHelp" className="form-text">Nunca compartiremos su nombre con nadie más.</div>
+    </div>
   <div className="mb-3">
     <label htmlFor="exampleInputEmail1" className="form-label">Correo electrónico</label>
     <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"></input>

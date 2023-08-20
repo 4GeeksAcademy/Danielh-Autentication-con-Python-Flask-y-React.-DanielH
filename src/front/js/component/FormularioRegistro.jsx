@@ -1,7 +1,7 @@
 import React from "react";
 
 
-export const Signup = () => {
+export const FormularioRegistro = () => {
     return(
         <form>
     <div className="mb-3">

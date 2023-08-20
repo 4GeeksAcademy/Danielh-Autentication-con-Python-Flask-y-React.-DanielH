@@ -10,8 +10,8 @@ import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import { Signup } from "/workspaces/Danielh-Autentication-con-Python-Flask-y-React.-DanielH/src/front/js/component/Signup.jsx";
-import {Login} from "/workspaces/Danielh-Autentication-con-Python-Flask-y-React.-DanielH/src/front/js/pages/Login.jsx"
+import { FormularioRegistro } from "/workspaces/Danielh-Autentication-con-Python-Flask-y-React.-DanielH/src/front/js/component/FormularioRegistro.jsx";
+import {Signup} from "/workspaces/Danielh-Autentication-con-Python-Flask-y-React.-DanielH/src/front/js/pages/Signup.jsx"
 
 //create your first component
 const Layout = () => {
@@ -30,7 +30,7 @@ const Layout = () => {
                         <Route element={<Home />} path="/" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<Login />} path="/login" />
+                        <Route element={<Signup />} path="/signup" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
                     <Footer />

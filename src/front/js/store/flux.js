@@ -13,34 +13,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 					background: "white",
 					initial: "white"
 				}
-			]
+			],
+
+			token: null,
+			userLoggedIn: {},
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-
-			// Nueva función para enviar datos de registro al servidor
-			registerUser: async (userData) => {
-				try {
-					const resp = await fetch(process.env.BACKEND_URL + "/api/register", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify(userData)
-					});
-
-					if (resp.ok) {
-						// Realizar alguna acción en caso de éxito, por ejemplo, redireccionar a otra página
-					} else {
-						console.log("Error registering user", resp.status, resp.statusText);
-					}
-				} catch (error) {
-					console.log("Error registering user", error);
-				}
-			},
-
-			
-
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
@@ -70,7 +49,85 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
-			}
+			},
+
+			syncTokenFromSessionStore: () => {
+				const token = sessionStorage.getItem("token");
+				console.log("Application just loaded, synching the session storage token")
+				const user = localStorage.getItem('user')
+				if(token && token != "" && token != undefined){
+					setStore({token: token})
+					setStore({userLoggedIn: user})
+				} 
+			},
+
+			logout: () => {
+				sessionStorage.removeItem("token");
+				console.log("Login out")
+				setStore({ token: null })
+			},
+
+			login: async (email, password) => {
+				const store = getStore()
+
+				const options = {
+
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer " + store.token
+					},
+					body: JSON.stringify({
+						email: email,
+						password: password
+					})
+				};
+
+				try{
+					const resp = await fetch(process.env.BACKEND_URL + "/api/token", options)
+				if(resp.status !== 200) {
+					alert("There has been some error");
+					return false;
+				};
+				const data = await resp.json();
+				sessionStorage.setItem("token", data.token);
+				localStorage.setItem("user", JSON.stringify(data.user))
+				setStore({token: data.token})
+				setStore({userLoggedIn: data.user})
+				return true;
+				}
+				catch(error){
+					console.error("There has been an error login in")
+				}
+			},
+
+			addNewUser: async (newUser) => {
+				try {
+
+					const resp = await fetch(process.env.BACKEND_URL + "/api/signup", {
+						method: "POST", // *GET, POST, PUT, DELETE, etc.
+						mode: "cors", // no-cors, *cors, same-origin
+						//cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+						//credentials: "same-origin", // include, *same-origin, omit
+						headers: {
+							"Content-Type": "application/json",
+							// 'Content-Type': 'application/x-www-form-urlencoded',
+						},
+						//redirect: "follow", // manual, *follow, error
+						//referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+						body: JSON.stringify(newUser) // body data type must match "Content-Type" header
+					})
+					const data = await resp.json();
+					console.log(data);
+					return true;
+
+				} catch (error) {
+					console.log(error)
+				}
+				console.log("Enviando solicitud a:", process.env.BACKEND_URL + "/api/signup");
+				console.log("Datos a enviar:", newUser);
+			},
+
 		}
 	};
 };

@@ -17,6 +17,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+
+			// Nueva función para enviar datos de registro al servidor
+			registerUser: async (userData) => {
+				try {
+					const resp = await fetch(process.env.BACKEND_URL + "/api/register", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify(userData)
+					});
+
+					if (resp.ok) {
+						// Realizar alguna acción en caso de éxito, por ejemplo, redireccionar a otra página
+					} else {
+						console.log("Error registering user", resp.status, resp.statusText);
+					}
+				} catch (error) {
+					console.log("Error registering user", error);
+				}
+			},
+
+			
+
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
 			},
